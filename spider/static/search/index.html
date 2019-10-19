@@ -4,19 +4,75 @@
     <title>Walmart Brand Google</title>
     <link rel="stylesheet" href="../style.css">
     <script src="../tilt.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 
 <body>
-    <nav class="site-top-bar">
-        <a href="/info">Info</a>
-    </nav>
     <main>
-                <img src="../logo.png" alt="Googel" style="width:100%; height: auto;">
-                <div class="searchbox-group">
-                    <input type="text" placeholder="Q" name="search" class="searchbox">
-                    <input type="submit" value="Search">
-                </div>
-                <p class="legal">Note: these sites are sourced from openphish.com's phishing feed and UBlock origin's Spam404 list. While they are likely to be scams, they may not be.</p>
-                <p class="legal">Also: This site contains malicious links.</p>
+        <div class="main-top-bar">
+            <a href="/"><img src="../logo.png" alt="Googel" style="width:200px; height: auto;"></a>
+            <div class="searchbox-group">
+                <input type="text" placeholder="Q" name="search" class="searchbox">
+                <input type="submit" value="Search">
+            </div>
+        </div>
+        
+        <div id="app">
+            <div v-for="result in results">
+                <h3 v-on:click="modal($event)" v-bind:data-url=result.url>{{result.url}}</h3>
+            </div>
+            
+            <div v-if="modalshow" class="modal" v-on:keyup.enter="modalclose">
+                <h1>Test</h1>
+                <img v-bind:src="'data:image/jpeg;base64,'+image" width=960 height=540 />
+            </div>
+        </div>
+
+        <br>
+
+        <p class="legal">Note: these sites are sourced from openphish.com's phishing feed and UBlock origin's Spam404 list. While they are likely to be scams, they may not be.</p>
+        <p class="legal">Also: This site contains malicious links.</p>
     </main>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                results: [],
+                image: null,
+                modalshow: false
+            },
+            methods: {
+                modal(event) {
+                    let url = event.target.dataset.url;
+                    fetch(`/getpagescreenshot?url=${url}`).then((res)=>res.text()).then(base64=>{
+                        app.image = base64;
+                        app.modalshow = true
+                    });
+                },
+                modalclose() {
+                    console.log("WUT")
+                    app.modalshow = false;
+                }
+            },
+            events: {
+                "escape-pressed": function () {
+                    console.log("TEST");
+                    app.methods.modalclose();
+                }
+            },
+            created: () => {
+                window.addEventListener('keyup', function (event) {
+                    // If down arrow was pressed...
+                    if (event.keyCode == 27) {
+                        app.modalclose();
+                    }
+                });
+            }
+        });
+
+        fetch("/searchapi").then((res)=>res.json()).then(json=>{
+            app.results = json.results;
+        });
+    </script>
 </body>

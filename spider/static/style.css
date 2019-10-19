@@ -1,64 +1,118 @@
 :root {
-            font-size: 30px;
-        }
-        *, *:after, *:before{
-            font-family: walmart !important;
-        }
-        input {
-            font-size: 1rem;
-        }
-        main {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 95vh;
-        }
+    font-size: 30px;
+}
+*, *:after, *:before{
+    font-family: walmart !important;
+}
+input {
+    font-size: 1rem;
+}
 
-        @font-face {
-            font-family: walmart;
-            src: url("font.ttf") format('truetype');
-        }
+body {
+    margin: 0;
+    padding: 0;
 
-        .centerbox {
-            width: 30rem;
-        }
-        
-        .searchbox {
-            width: 80%;
+}
 
-            border: none;
-            border-radius: 10px;
+.center-site {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 95vh;
+}
+@font-face {
+    font-family: walmart;
+    src: url("font.ttf") format('truetype');
+}
 
-            padding: 0.5rem;
+.centerbox {
+    width: 30rem;
+}
 
-            background-image: url("left.png"), url("right.png"), url("top.png"), url("top.png");
+.searchbox {
+    width: 80%;
 
-            background-position: 0 0, 100% 0, 0 0, 0 100%;
+    border: none;
+    border-radius: 10px;
 
-            background-repeat: no-repeat, no-repeat, repeat-x, repeat-x;
+    padding: 0.5rem;
 
-            background-size: auto 100%, auto 100%, 8rem, 8rem;
+    background-image: url("left.png"), url("right.png"), url("top.png"), url("top.png");
 
-        }
+    background-position: 0 0, 100% 0, 0 0, 0 100%;
 
-        .site-top-bar {
-            display: flex;
-            justify-content: flex-end;
-        }
+    background-repeat: no-repeat, no-repeat, repeat-x, repeat-x;
 
-        input[type="submit"] {
-            height: 100%;
-            display: block;
-            float: right;
-            border: none;
-        }
+    background-size: auto 100%, auto 100%, 8rem, 8rem;
 
-        .legal {
-            font-size: 0.7rem;
-        }
+}
 
-        .searchbox-group:after{ 
-            content: "";
-            display: table;
-            clear: both;
-        }
+.site-top-bar {
+    display: flex;
+}
+
+input[type="submit"] {
+    height: 100%;
+    display: block;
+    float: right;
+    border: none;
+}
+
+.legal {
+    font-size: 0.7rem;
+}
+
+.searchbox-group:after{ 
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+.main-top-bar img {
+    float: left;
+    margin-right: 1rem;
+}
+
+.main-top-bar .searchbox-group {
+    width: 30rem;
+    float: left;
+}
+
+
+.main-top-bar {
+    width: 100%;
+    background-image: url("bottom.png");
+    background-position: 0% 100%;
+    background-repeat: repeat-x;
+    background-size: 6rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    margin-bottom: 2rem;
+}
+
+.main-top-bar:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+/* 
+.modal:before {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    top: 0;
+    left: 0;
+    content: '';
+} */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000000000000000000;
+    background-color: red;
+    transform:rotate(0.1deg);
+}

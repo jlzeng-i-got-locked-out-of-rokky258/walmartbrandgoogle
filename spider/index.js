@@ -28,6 +28,19 @@ app.get('/getpagescreenshot', async (req, res) => {
     }
 })
 
+app.get('/searchapi', async (req, res) => {
+    res.send(`
+            {"results": [
+                {
+                    "url": "https://google.com"
+                },
+                {
+                    "url": "https://facebook.com"
+                }
+            ]}
+    `);
+})
+
 app.use(express.static("static"));
 
 app.listen(3000)

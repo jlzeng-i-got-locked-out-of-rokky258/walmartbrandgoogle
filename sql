@@ -14,16 +14,9 @@ CREATE TABLE words (
     FOREIGN KEY (document) REFERENCES documents(id) 
 );
 
+# Create a new document
+INSERT INTO documents(url) VALUES({url});
 
-INSERT INTO documents(url) VALUES("google.com");
-
-
-
+# Update the words table and increase the count on documents
 INSERT INTO words(word, document) VALUES({word}, {document}) ON DUPLICATE KEY UPDATE count = count + 1;
 UPDATE documents SET count = count + 1 WHERE id={document};
-
-INSERT INTO words(word, document) VALUES("nutrigrain", 1) ON DUPLICATE KEY UPDATE count = count + 1;
-UPDATE documents SET count = count + 1 WHERE id=1;
-
-
-INSERT INTO words(word, document) VALUES("test", "google.com") ON DUPLICATE KEY UPDATE count = count + 1

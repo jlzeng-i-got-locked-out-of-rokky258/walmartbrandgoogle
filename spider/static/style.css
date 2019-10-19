@@ -1,0 +1,64 @@
+:root {
+            font-size: 30px;
+        }
+        *, *:after, *:before{
+            font-family: walmart !important;
+        }
+        input {
+            font-size: 1rem;
+        }
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 95vh;
+        }
+
+        @font-face {
+            font-family: walmart;
+            src: url("font.ttf") format('truetype');
+        }
+
+        .centerbox {
+            width: 30rem;
+        }
+        
+        .searchbox {
+            width: 80%;
+
+            border: none;
+            border-radius: 10px;
+
+            padding: 0.5rem;
+
+            background-image: url("left.png"), url("right.png"), url("top.png"), url("top.png");
+
+            background-position: 0 0, 100% 0, 0 0, 0 100%;
+
+            background-repeat: no-repeat, no-repeat, repeat-x, repeat-x;
+
+            background-size: auto 100%, auto 100%, 8rem, 8rem;
+
+        }
+
+        .site-top-bar {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        input[type="submit"] {
+            height: 100%;
+            display: block;
+            float: right;
+            border: none;
+        }
+
+        .legal {
+            font-size: 0.7rem;
+        }
+
+        .searchbox-group:after{ 
+            content: "";
+            display: table;
+            clear: both;
+        }

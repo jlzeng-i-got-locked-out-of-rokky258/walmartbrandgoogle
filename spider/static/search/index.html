@@ -21,11 +21,13 @@
             <div v-for="result in results">
                 <h3 v-on:click="modal($event)" v-bind:data-url=result.url>{{result.url}}</h3>
             </div>
-            
-            <div v-if="modalshow" class="modal" v-on:keyup.enter="modalclose">
-                <h1>Test</h1>
-                <img v-bind:src="'data:image/jpeg;base64,'+image" width=960 height=540 />
+            <div class="modalwrapper" v-if="modalshow" >
+                    <div class="modal">
+                        <h1>Test</h1>
+                        <img v-bind:src="'data:image/jpeg;base64,'+image" width=960 height=540 />
+                    </div>
             </div>
+            
         </div>
 
         <br>

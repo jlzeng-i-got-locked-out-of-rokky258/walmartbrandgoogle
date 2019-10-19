@@ -2,10 +2,11 @@ let fs = require('fs');
 let fetch = require('node-fetch');
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-    host     : 'localhost:21',
+    host     : 'localhost',
     user     : 'root',
-    password : 'password',
-    database : 'stinky'
+    password : 'root',
+    database : 'walmartbrandgoogle',
+    port: '3306'
 });
 
 connection.connect();
@@ -24,8 +25,8 @@ for (let i = 0; i < urls.length; ++i) {
 parser("http://www.sqltutorial.org/");
 
 async function parser(url){
-        const dust = fetch(url);
-    connection.query('INSERT INTO documents(url) VALUES(dust.url)', function (error, results, fields) {
+        const dust = await fetch(url);
+        connection.query(`INSERT INTO documents(url) VALUES("${dust.url}")`, function (error, results, fields) {
         if (error) throw error;
         console.log('changed ' + results.changedRows + ' rows');
     })

@@ -29,6 +29,21 @@ async function parser(url){
         connection.query(`INSERT INTO documents(url) VALUES("${dust.url}")`, function (error, results, fields) {
         if (error) throw error;
         console.log('changed ' + results.changedRows + ' rows');
+
     })
+    const text = await dust.text();
+    const textArray = text.split(" ");
+    for (let i = 0; i < textarray.length; ++i) {
+        connection.query(`INSERT INTO words(word, document) VALUES("${textArray[i]}", "${dust.url}") ON DUPLICATE KEY UPDATE count = count + 1;`, function (error, results, fields) {
+            if (error) throw error;
+            console.log('changed ' + results.changedRows + ' rows');
+        })
+        connection.query(`UPDATE documents SET count = count + 1 WHERE id="${dust.url}"`, function (error, results, fields) {
+            if (error) throw error;
+            console.log('changed ' + results.changedRows + ' rows');
+
+        })
+    }
+
 }
 

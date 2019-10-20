@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS words;
 DROP TABLE IF EXISTS documents;
 CREATE TABLE documents (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -5,14 +6,17 @@ CREATE TABLE documents (
     count INT DEFAULT 0
 );
 
-DROP TABLE IF EXISTS words;
+
 CREATE TABLE words (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    word VARCHAR(60) NOT NULL UNIQUE,
+    word VARCHAR(60) NOT NULL,
     count INT DEFAULT 1,
     document INT, 
     FOREIGN KEY (document) REFERENCES documents(id) 
 );
+ALTER TABLE words ADD UNIQUE unique_index (word, document);
+
+
 
 # Create a new document
 INSERT INTO documents(url) VALUES({url});
@@ -29,7 +33,7 @@ UPDATE documents SET count = count + 1 WHERE id={document};
 
 
 # We get all the rorws associated with a word in the table
-SELECT * FROM words WHERE word=${word});
+SELECT SUM(count) FROM words WHERE word=${word});
 
 
 

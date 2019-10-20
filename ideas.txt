@@ -1,0 +1,28 @@
+take screenshots of sites
+autoblur with checkmark
+
+
+parser to get site content
+script to take content and put into database
+api to get search results from database
+front end
+
+strech goal: words related to words
+
+
+Schema:
+
+TABLE: words
+
+word: the string value of the word
+
+count: the count of that word in that document
+
+document: a link to the document
+
+
+TABLE: documents
+
+url: url of the document
+
+count: word count of the document

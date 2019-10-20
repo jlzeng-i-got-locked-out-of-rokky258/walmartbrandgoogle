@@ -15,14 +15,13 @@ connection.query('SELECT 1', function (error, results, fields) {
     if (error) throw error;
     // connected!
 });
-/*
+
 let urls = fs.readFileSync('../domains.txt').toString().split("\n");
 for (let i = 0; i < urls.length; ++i) {
     urls[i] = urls[i].trim();
     parser(urls[i]);
 }
-*/
-parser("http://www.sqltutorial.org/");
+
 
 async function parser(url){
     const bigUrl = "http://localhost:3000/getpagecontent?url="+url;

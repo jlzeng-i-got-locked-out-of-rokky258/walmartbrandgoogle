@@ -16,7 +16,19 @@ connection.query('SELECT 1', function (error, results, fields) {
     // connected!
 });
 
-let urls = fs.readFileSync('../testdomains.txt').toString().trim().split("\n");
+let urls = fs.readFileSync('../domains.txt').toString().trim().split("\n");
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+urls = shuffle(urls);
+
 
 async function parseAll(urls) {
     for (let i = 0; i < urls.length; ++i) {

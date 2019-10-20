@@ -4,7 +4,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : 'nutrigrain',
+    password : 'root',
     database : 'walmartbrandgoogle',
     port: '3306'
 });
@@ -42,23 +42,41 @@ parseAll(urls).then(res=>console.log("Parse all done"));
 
 async function parser(url){
     try {
+        console.log(url + " start");
         const bigUrl = "http://localhost:3000/getpagecontent?url="+url;
         const dust = await fetch(bigUrl);
         let text = await dust.text();
-        connection.query(`INSERT IGNORE INTO documents(url, description) VALUES("${url}", "${text}")`, async function (error, results, fields) {
-            text = text.toLowerCase();
-            const textArray = text.split(" ");
-            for (let i = 0; i < textArray.length; ++i) {
-                connection.query(`INSERT INTO words(word, document) VALUES("${textArray[i]}", (SELECT id FROM documents WHERE url="${url}")) ON DUPLICATE KEY UPDATE count = count + 1;`, function (error, results, fields) {
-                })
-                connection.query(`UPDATE documents SET count = count + 1 WHERE url="${url}"`, function (error, results, fields) {
-                })
+        if (text.length != 0) {
+            console.log(connection.escape(url));
+            let result = await pConnection(`INSERT IGNORE INTO documents(url, description) VALUES(${connection.escape(url)}, ${connection.escape(text)})`);
+            console.log(text.length);
+            if (result.affectedRows != 0) {
+                text = text.toLowerCase();
+                const textArray = text.split(" ");
+
+                for (let i = 0; i < textArray.length; ++i) {
+                    await pConnection(`INSERT INTO words(word, document) VALUES(${connection.escape(textArray[i])}, (SELECT id FROM documents WHERE url=${connection.escape(url)})) ON DUPLICATE KEY UPDATE count = count + 1;`);
+                    await pConnection(`UPDATE documents SET count = count + 1 WHERE url=${connection.escape(url)}`);
+                }
+                console.log(url + " done");
+            } else {
+                console.log(url + " already parsed");
             }
-            console.log(url);
-        })
+        } else {
+            console.log(url + " has no content");
+        }
+        
     } catch (e) {
         console.log(e);
     }
         
 }
 
+function pConnection(query) {
+    return new Promise(function(resolve, reject) {
+        connection.query(query, function (error, results, fields) {
+            if (error) reject(error);
+            resolve(results);
+        })
+    });
+}

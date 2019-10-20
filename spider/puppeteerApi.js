@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 let browser, page;
 
-puppeteer.launch({ args: ['--no-sandbox'] }).then((newBrowser) => {
+puppeteer.launch().then((newBrowser) => {
     browser = newBrowser;
     browser.newPage().then((newPage) => {
         page = newPage;

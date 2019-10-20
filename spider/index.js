@@ -10,7 +10,7 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'nutrigrain',
+    password: 'root',
     database: 'walmartbrandgoogle',
     port: '3306'
 });

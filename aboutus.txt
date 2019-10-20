@@ -1,7 +1,3 @@
-# walmartbrandgoogle
-Authors: Adam Powell and Jerry Zeng
-Google except it only shows you knockoff sites. (Search engine that only shows you phishing sites)
-
 Walmart Brand Google is a terrible site made off of a terrible idea made by terrible people for a great hackathon named HackUmass 0111.
 We wanted a project that would challenge us and allow us to learn in areas that we were not comfortable with while still having fun making something.
 
@@ -11,3 +7,8 @@ And now there is.
 
 About Us
 We're both 2nd years at UMass Amherst working on our B.S. in computer science. 
+
+Adam Powell is photographed on the left.
+I, Jerry Zeng, am photographed on the right.
+
+Peace out gamers

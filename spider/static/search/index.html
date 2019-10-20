@@ -24,6 +24,9 @@
                 <h3 v-on:click.self="modal($event)" v-bind:data-url=result.url v-bind:data-description=result.description>{{result.url}}</h3>
                 <p class="description">{{result.description}}</p>
             </div>
+            <div v-if="results.length===0">
+                <h3>No results!</h3>
+            </div>
             <div v-if="loading" class="loading-gray">
                 <img src="../madeforhackumass7.png" alt="Loading" class="loader">
             </div>
@@ -31,7 +34,8 @@
                 <div class="modal">
                     <h1>{{ selected.url }}</h1>
                     <p class="legal">{{ selected.description }}</p>
-                    <img v-bind:src="'data:image/jpeg;base64,'+image" width=960 height=540 />
+                    <img  class="autoblur" v-bind:src="'data:image/jpeg;base64,'+image"  width=960 height=540 />
+                    
                 </div>
             </div>
             <br>
@@ -100,10 +104,10 @@
                     fetch("/searchapi?search=" + app.searchTerm).then((res) => res.json()).then(json => {
                         app.results = json.results;
                     });
+
+                        
                 })
             }
         });
-
-        
     </script>
 </body>

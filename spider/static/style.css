@@ -80,7 +80,14 @@ input[type="submit"] {
     float: left;
 }
 
+.autoblur {
+    filter: blur(30px);
+    transition: 3s;
+}
 
+.autoblur:hover {
+    filter: initial;
+}
 
 .main-top-bar {
     width: 100%;

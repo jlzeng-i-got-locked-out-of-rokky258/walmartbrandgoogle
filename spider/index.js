@@ -1,6 +1,7 @@
 
 let express = require('express')
 let app = express()
+let sw = require('stopword')
 
 let renderer = require('./puppeteerApi')
 
@@ -23,7 +24,8 @@ function sortCount(a, b) {
 
 async function searchAll(searchTerms) {
     arrayofUrlthenCount = [];
-    let searchWords = searchTerms.split(" ");
+    let searchWords = sw.removeStopwords(searchTerms.split(" "));
+    
     for (let i = 0; i < searchWords.length; ++i) {
         searchWords[i] = searchWords[i].trim();
         await searcher(searchWords[i]);
@@ -44,6 +46,7 @@ function searcher(word) {
                     } else {
                         if (arrayofUrlthenCount[y].url === results[x].url) {
                             arrayofUrlthenCount[y].count += results[x].count;
+                            break;
                         }
                     }
                 }
@@ -87,7 +90,7 @@ app.get('/getpagescreenshot', async (req, res) => {
 })
 
 app.get('/searchapi', async (req, res) => {
-
+    
     searchAll(req.query.search).then(
         result => {
             let list = [];

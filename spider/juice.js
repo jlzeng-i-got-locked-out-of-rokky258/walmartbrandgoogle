@@ -15,8 +15,8 @@ connection.query('SELECT 1', function (error, results, fields) {
     if (error) throw error;
     // connected!
 });
-let arrayofUrlthenCount;
-let searchTerm = "hack";
+let arrayofUrlthenCount = [];
+let searchTerm = "hack ios";
 let searchWords = searchTerm.split(" ");
 
 function sortCount(a, b) {
@@ -27,32 +27,37 @@ async function searchAll(searchWords) {
     for (let i = 0; i < searchWords.length; ++i) {
         searchWords[i] = searchWords[i].trim();
         await searcher(searchWords[i]);
+        console.log("WUT")
         arrayofUrlthenCount.sort(sortCount);
     }
+    return arrayofUrlthenCount;
 }
 
-searchAll(searchWords).then(res=>console.log("Search all done"));
+searchAll(searchWords).then(res=>console.log(res));
 
 
-async function searcher(word){
-    try {
-        connection.query(`SELECT (SELECT url FROM documents WHERE id = words.document) AS url, words.count FROM words WHERE word = "${word}";`, async function (error, results, fields) {
+function searcher(word){
+
+    let res = new Promise(function (resolve, reject) {
+        connection.query(`SELECT (SELECT url FROM documents WHERE id = words.document) AS url, words.count FROM words WHERE word = "${word}";`, function (error, results, fields) {
             if (error) throw error;
-           for(let x = 0; x < results.length; ++x){
-               for(let y = 0; y <= arrayofUrlthenCount.size; ++y){
-                   if(y === arrayofUrlthenCount.size){
-                       arrayofUrlthenCount.push(results[x]);
-                   }
-                   else{
-                       if(arrayofUrlthenCount[y].url === results[x].url){
-                           arrayofUrlthenCount[y].count += results[x].count;
-                       }
-                   }
-               }
-           }
+            for (let x = 0; x < results.length; ++x) {
+                for (let y = 0; y <= arrayofUrlthenCount.length; ++y) {
+                    if (y === arrayofUrlthenCount.length) {
+                        console.log("GOT TO FIRST BRANCH")
+                        arrayofUrlthenCount.push(results[x]);
+                        break;
+                    } else {
+                        console.log("GOT TO SECOND BRANCH")
+                        if (arrayofUrlthenCount[y].url === results[x].url) {
+                            arrayofUrlthenCount[y].count += results[x].count;
+                        }
+                    }
+                }
+            }
+            resolve();
         })
-    } catch (e) {
-        console.log(e);
-    }
+    });
 
+    return res;
 }

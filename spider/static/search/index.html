@@ -9,18 +9,20 @@
 
 <body>
     <main >
-        <div class="main-top-bar">
-            <a href="/"><img src="../logo.png" alt="Googel" style="width:200px; height: auto;"></a>
-            <div class="searchbox-group">
-                <input type="text" placeholder="Q" name="search" class="searchbox">
-                <input type="submit" value="Search">
+        <form action="/search" method="GET">
+            <div class="main-top-bar">
+                <a href="/"><img src="../logo.png" alt="Googel" style="width:200px; height: auto;"></a>
+                <div class="searchbox-group">
+                    <input type="text" placeholder="Q" name="search" class="searchbox">
+                    <input type="submit" value="Search">
+                </div>
             </div>
-        </div>
+        </form>
         
         <div id="app" style="max-width: 60rem; margin: 0 auto;">
-            <div v-for="result in results">
-                <h3 v-on:click="modal($event)" v-bind:data-url=result.url>{{result.url}}</h3>
-                <p v-on:click="modal($event)" v-bind:data-url=result.url>{{result.description}}</p>
+            <div v-for="result in results" >
+                <h3 v-on:click.self="modal($event)" v-bind:data-url=result.url v-bind:data-description=result.description>{{result.url}}</h3>
+                <p class="description">{{result.description}}</p>
             </div>
             <div v-if="loading" class="loading-gray">
 
@@ -52,12 +54,13 @@
                     url: ""
                 },
                 loading: false,
-                description: ""
+                description: "",
+                searchTerm: ''
             },
             methods: {
                 modal(event) {
                     let url = event.target.dataset.url;
-                    let description = event.target.querySelector(".description").innerHTML;
+                    let description = event.target.dataset.description;
                     app.loading = true;
                     fetch(`/getpagescreenshot?url=${url}`).then((res)=>res.text()).then(base64=>{
                         app.image = base64;
@@ -83,11 +86,24 @@
                         app.modalclose();
                     }
                 });
+                window.addEventListener('load', function (event) {
+                    function getUrlVars() {
+                        var vars = {};
+                        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+                            vars[key] = value;
+                        });
+                        return vars;
+                    }
+
+                    app.searchTerm = getUrlVars().search;
+
+                    fetch("/searchapi?search=" + app.searchTerm).then((res) => res.json()).then(json => {
+                        app.results = json.results;
+                    });
+                })
             }
         });
 
-        fetch("/searchapi").then((res)=>res.json()).then(json=>{
-            app.results = json.results;
-        });
+        
     </script>
 </body>

@@ -36,7 +36,7 @@ async function searchAll(searchTerms) {
 
 function searcher(word) {
     let res = new Promise(function (resolve, reject) {
-        connection.query(`SELECT (SELECT url FROM documents WHERE id = words.document) AS url, words.count FROM words WHERE word = "${word}";`, function (error, results, fields) {
+        connection.query(`SELECT (SELECT url FROM documents WHERE id = words.document) AS url, words.count FROM words WHERE word = "${word}", desc FROM documents WHERE id = words.document;`, function (error, results, fields) {
             if (error) throw error;
             for (let x = 0; x < results.length; ++x) {
                 for (let y = 0; y <= arrayofUrlthenCount.length; ++y) {

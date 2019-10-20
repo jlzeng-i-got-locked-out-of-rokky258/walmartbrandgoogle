@@ -31,8 +31,14 @@ UPDATE documents SET count = count + 1 WHERE id={document};
 
 
 
+#get all of the documents that contain this word
+SELECT DISTINCT document FROM words WHERE word = ${word};
+#get the amount of times the word shows up in a certain document
+SELECT count FROM words WHERE document = ${document};
 
-# We get all the rorws associated with a word in the table
+
+
+# We get all the rows associated with a word in the table
 SELECT SUM(count) FROM words WHERE word=${word});
 
 

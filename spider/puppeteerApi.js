@@ -9,15 +9,22 @@ puppeteer.launch().then((newBrowser) => {
 });
 
 exports.getContent = async (url) => {
-    await page.goto(url);
-
-    return await page.evaluate(element => element.innerText, await page.$("body"));
+    try {
+        await page.goto(url);
+        return await page.evaluate(element => element.innerText, await page.$("body"));
+    } catch (e) {
+        return await "";
+    }
 }
 
 exports.getScreenshot = async (url) => {
-    await page.goto(url);
+    try {
+        await page.goto(url);
 
-    // save screenshot
-    await page.setViewport({ height: 1080, width: 1920 })
-    return await page.screenshot({ encoding: 'base64' });
+        // save screenshot
+        await page.setViewport({ height: 1080, width: 1920 })
+        return await page.screenshot({ encoding: 'base64' });
+    } catch (e) {
+        return await "";
+    }
 }

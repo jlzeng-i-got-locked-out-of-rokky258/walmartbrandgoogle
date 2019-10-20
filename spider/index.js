@@ -14,6 +14,12 @@ app.get('/getpagecontent', async (req, res) => {
     }
 })
 
+app.get('/getsitedescription', async (req, res) => {
+    let content = await renderer.getContent(req.query.url);
+    let pos = content.toLowerCase().indexOf(req.query.val.toLowerCase());
+    res.send(content.slice(pos, pos + 400));
+});
+
 // Api endpoint to get a base64 encoded screenshot of a page
 app.get('/getpagescreenshot', async (req, res) => {
     try {
@@ -32,10 +38,12 @@ app.get('/searchapi', async (req, res) => {
     res.send(`
             {"results": [
                 {
-                    "url": "https://google.com"
+                    "url": "https://google.com",
+                    "description": "This is a fake description but there are real very bad descriptions we also have"
                 },
                 {
-                    "url": "https://facebook.com"
+                    "url": "https://facebook.com",
+                    "description": "This is another, not real description"
                 }
             ]}
     `);

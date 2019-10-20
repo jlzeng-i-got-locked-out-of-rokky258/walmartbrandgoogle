@@ -37,7 +37,7 @@ async function parser(url){
         connection.query(`INSERT INTO words(word, document) VALUES("${textArray[i]}", (SELECT id FROM documents WHERE url="${url}")) ON DUPLICATE KEY UPDATE count = count + 1;`, function (error, results, fields) {
             if (error) throw error;
         })
-        connection.query(`UPDATE documents SET count = count + 1 WHERE id="${url}"`, function (error, results, fields) {
+        connection.query(`UPDATE documents SET count = count + 1 WHERE url="${url}"`, function (error, results, fields) {
             if (error) throw error;
 
         })

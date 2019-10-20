@@ -16,7 +16,7 @@ connection.query('SELECT 1', function (error, results, fields) {
     // connected!
 });
 
-let urls = fs.readFileSync('../domains.txt').toString().split("\n");
+let urls = fs.readFileSync('../testdomains.txt').toString().split("\n");
 for (let i = 0; i < urls.length; ++i) {
     urls[i] = urls[i].trim();
     parser(urls[i]);

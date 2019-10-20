@@ -36,24 +36,28 @@ async function searchAll(searchTerms) {
 
 function searcher(word) {
     let res = new Promise(function (resolve, reject) {
-        connection.query(`SELECT (SELECT url FROM documents WHERE id = words.document) AS url, words.count FROM words WHERE word = "${word}", desc FROM documents WHERE id = words.document;`, function (error, results, fields) {
-            if (error) throw error;
-            for (let x = 0; x < results.length; ++x) {
-                for (let y = 0; y <= arrayofUrlthenCount.length; ++y) {
-                    if (y === arrayofUrlthenCount.length) {
-                        arrayofUrlthenCount.push(results[x]);
-                        break;
-                    } else {
-                        if (arrayofUrlthenCount[y].url === results[x].url) {
-                            arrayofUrlthenCount[y].count += results[x].count;
+        try {
+            connection.query(`SELECT (SELECT url FROM documents WHERE id = words.document) AS url, words.count, documents.description FROM words, documents WHERE word = "${word}" AND documents.id = words.document;`, function (error, results, fields) {
+                for (let x = 0; x < results.length; ++x) {
+                    for (let y = 0; y <= arrayofUrlthenCount.length; ++y) {
+                        if (y === arrayofUrlthenCount.length) {
+                            arrayofUrlthenCount.push(results[x]);
                             break;
+                        } else {
+                            if (arrayofUrlthenCount[y].url === results[x].url) {
+                                arrayofUrlthenCount[y].count += results[x].count;
+                                break;
+                            }
                         }
                     }
                 }
-            }
+                resolve();
+            })
+        } catch (e) {
             resolve();
-        })
-    });
+        }
+        
+    }).catch((e)=>console.log(e));
 
     return res;
 }
@@ -97,7 +101,7 @@ app.get('/searchapi', async (req, res) => {
             for (let i = 0; i < result.length; i ++) {
                 list.push({
                     "url": result[i].url,
-                    "description": "HAHA strech goals am i right"
+                    "description": result[i].description
                 });
             }
             res.send({

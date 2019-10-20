@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS documents;
 CREATE TABLE documents (
     id INT PRIMARY KEY AUTO_INCREMENT,
     url VARCHAR(600) NOT NULL UNIQUE,
-    desc VARCHAR(280) NOT NULL,
+    description VARCHAR(280) NOT NULL,
     count INT DEFAULT 0
 );
 

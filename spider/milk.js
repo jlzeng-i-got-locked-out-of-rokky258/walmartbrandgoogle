@@ -33,7 +33,7 @@ async function parser(url){
         const bigUrl = "http://localhost:3000/getpagecontent?url="+url;
         const dust = await fetch(bigUrl);
         let text = await dust.text();
-        connection.query(`INSERT IGNORE INTO documents(url, desc) VALUES("${url}", "${text}")`, async function (error, results, fields) {
+        connection.query(`INSERT IGNORE INTO documents(url, description) VALUES("${url}", "${text}")`, async function (error, results, fields) {
             text = text.toLowerCase();
             const textArray = text.split(" ");
             for (let i = 0; i < textArray.length; ++i) {

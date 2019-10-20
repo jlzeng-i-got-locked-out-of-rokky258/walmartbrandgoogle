@@ -1,6 +1,8 @@
 # walmartbrandgoogle
 Authors: Adam Powell and Jerry Zeng
 Google except it only shows you knockoff sites. (Search engine that only shows you phishing sites)
+This site shows you IMAGES of the links that we show. These websites are real but the risk of getting phished or tracked is not there. WE DO NOT ADVISE GOING ON ANY SITE FOUND ON THIS SITE.
+
 
 Walmart Brand Google is a terrible site made off of a terrible idea made by terrible people for a great hackathon named HackUmass 0111.
 We wanted a project that would challenge us and allow us to learn in areas that we were not comfortable with while still having fun making something.

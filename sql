@@ -36,6 +36,9 @@ SELECT DISTINCT document FROM words WHERE word = ${word};
 #get the amount of times the word shows up in a certain document
 SELECT count FROM words WHERE document = ${document};
 
+# Get a list of documents
+SELECT (SELECT url FROM documents WHERE id = words.document) AS url, words.count FROM words WHERE word = ${word};
+
 
 
 # We get all the rows associated with a word in the table

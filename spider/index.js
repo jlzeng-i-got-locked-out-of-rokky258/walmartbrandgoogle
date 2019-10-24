@@ -82,8 +82,10 @@ app.get('/getsitedescription', async (req, res) => {
 // Api endpoint to get a base64 encoded screenshot of a page
 app.get('/getpagescreenshot', async (req, res) => {
     try {
-        let screenshot = await renderer.getScreenshot(req.query.url);
-        if (req.query.pretty != null) {
+        let screenshot = await renderer.getScreenshot(req.query.url, req.query.width || 1920, req.query.height || 1080);
+        if (screenshot == undefined) {
+            res.send("error");
+        } else if (req.query.pretty != null) {
             res.send(`<img src="data:image/png;base64, ${screenshot}" />`);
         } else {
             res.send(screenshot);
@@ -94,35 +96,16 @@ app.get('/getpagescreenshot', async (req, res) => {
 })
 
 app.get('/searchapi', async (req, res) => {
-    
-    searchAll(req.query.search).then(
-        result => {
-            let list = [];
-            for (let i = 0; i < result.length; i ++) {
-                list.push({
-                    "url": result[i].url,
-                    "description": result[i].description
-                });
-            }
-            res.send({
-                "results" :list
-                
-            });
+    searchAll(req.query.search).then(results => {
+        let json = {
+            "results": results.map(result => ({
+                "url": result.url,
+                "description": result.description
+            }))
         }
-    );
-    // res.send(`
-    //         {"results": [
-    //             {
-    //                 "url": "https://google.com",
-    //                 "description": "This is a fake description but there are real very bad descriptions we also have"
-    //             },
-    //             {
-    //                 "url": "https://facebook.com",
-    //                 "description": "This is another, not real description"
-    //             }
-    //         ]}
-    // `);
-})
+        res.send(json);
+    });
+});
 
 
 app.use(express.static("static"));

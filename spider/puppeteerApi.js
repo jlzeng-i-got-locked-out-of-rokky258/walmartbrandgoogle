@@ -1,30 +1,40 @@
 const puppeteer = require('puppeteer');
-let browser, page;
+let browser;
 
-puppeteer.launch().then((newBrowser) => {
+puppeteer.launch({ args: ['--no-sandbox'], headless: true }).then((newBrowser) => {
     browser = newBrowser;
-    browser.newPage().then((newPage) => {
-        page = newPage;
-    })
 });
 
 exports.getContent = async (url) => {
+    let page, content;
     try {
+        page = await browser.newPage();
         await page.goto(url);
-        return await page.evaluate(element => element.innerText, await page.$("body"));
+        content = await page.evaluate(element => element.innerText, await page.$("body"));
     } catch (e) {
-        return await "";
+        console.log(e);
+    } finally {
+        await page.close();
     }
+
+    return content;
 }
 
-exports.getScreenshot = async (url) => {
+// Takes in a url. Returns a base64 encoded screenshot if the site can be visited, otherwise it returns undefined.
+exports.getScreenshot = async (url, width, height) => {
+    let page, screenshot;
     try {
+        page = await browser.newPage();
         await page.goto(url);
-
-        // save screenshot
-        await page.setViewport({ height: 1080, width: 1920 })
-        return await page.screenshot({ encoding: 'base64' });
+        await page.setViewport({ width, height });
+        screenshot = await page.screenshot({ encoding: 'base64' });
     } catch (e) {
-        return await "";
-    }
+        console.log(e);
+    } finally {
+        await page.close();
+    }  
+
+    console.log(`Took screenshot of ${url}`);
+
+    return screenshot;
 }

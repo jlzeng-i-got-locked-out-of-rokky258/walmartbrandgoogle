@@ -3,12 +3,16 @@
 <head>
     <title>Walmart Brand Google</title>
     <link rel="stylesheet" href="../style.css">
-    <script src="../tilt.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 
 <body>
     <main id="app" >
+
+        <div v-if="loading" class="loading-gray">
+            <img src="../madeforhackumass7.png" alt="Loading" class="loader">
+        </div>
+
         <form action="/search" method="GET">
             <div class="main-top-bar">
                 <a href="/"><img src="../logo.png" alt="Googel" style="width:200px; height: auto;"></a>
@@ -20,28 +24,25 @@
         </form>
         
         <div style="max-width: 60%; margin: 0 auto;">
-            <div v-for="result in results" >
-                <h3 v-on:click.self="modal($event)" v-bind:data-url=result.url v-bind:data-description=result.description>{{result.url}}</h3>
-                <p class="description">{{result.description}}</p>
-            </div>
+
             <div v-if="results.length===0">
                 <h3>No results!</h3>
             </div>
-            <div v-if="loading" class="loading-gray">
-                <img src="../madeforhackumass7.png" alt="Loading" class="loader">
+
+            <div v-for="result in results" >
+                <h3 v-on:click.self="modalShow(result.url, result.description)">{{result.url}}</h3>
+                <p class="description">{{result.description}}</p>
             </div>
-            <div class="modalwrapper" v-if="modalshow" v-on:click.self="modalclose">
+
+            <div class="modalwrapper" v-if="modal.show" v-on:click.self="modalClose()">
                 <div class="modal">
-                    <h1>{{ selected.url }}</h1>
-                    <p class="legal">{{ selected.description }}</p>
-                    <img  class="autoblur" v-bind:src="'data:image/jpeg;base64,'+image"  width=960 height=540 />
+                    <h3>{{ modal.url }}</h3>
+                    <p class="legal">{{ modal.description }}</p>
+                    <br>
+                    <img v-if="modal.image !== null" class="autoblur" v-bind:src="'data:image/jpeg;base64,'+modal.image"  width=960 height=540 />
                     
                 </div>
             </div>
-            <br>
-            
-            <p class="legal">Note: these sites are sourced from openphish.com's phishing feed and UBlock origin's Spam404 list. While they are likely to be scams, they may not be.</p>
-            <p class="legal">Also: This site only shows images of the allegedely malicious sites. It is safe to click on the links on our site. DO NOT visit the sites listed.</p>
         </div>
 
 
@@ -52,30 +53,38 @@
             el: '#app',
             data: {
                 results: [],
-                image: null,
-                modalshow: false,
-                selected: {
-                    url: ""
+                modal: {
+                    show: false,
+                    url: "",
+                    description: "",
+                    image: null
                 },
                 loading: false,
-                description: "",
                 searchTerm: ''
             },
             methods: {
-                modal(event) {
-                    let url = event.target.dataset.url;
-                    let description = event.target.dataset.description;
+                modalShow(url, description) {
                     app.loading = true;
                     fetch(`/getpagescreenshot?url=${url}`).then((res)=>res.text()).then(base64=>{
-                        app.image = base64;
-                        app.modalshow = true
-                        app.selected.url = url;
-                        app.selected.description = description;
+                        if (base64 === "error") {
+                            throw "Site not available";
+                        }
+                        app.modal.image = base64;
+                        app.modal.show = true
+                        app.modal.url = url;
+                        app.modal.description = description;
+                    }).catch(e=>{
+                        console.log(e);
+                        app.modal.image = null;
+                        app.modal.show = true;
+                        app.modal.url = "Site not found";
+                        app.modal.description = "This site appears to have been taken down from the web.";
+                    }).finally(()=>{
                         app.loading = false;
-                    }).catch((e)=> {app.loading = false; console.log(e)});
+                    });
                 },
-                modalclose() {
-                    app.modalshow = false;
+                modalClose() {
+                    app.modal.show = false;
                 }
             },
             events: {
@@ -85,7 +94,7 @@
             },
             created: () => {
                 window.addEventListener('keyup', function (event) {
-                    // If down arrow was pressed...
+                    // Add escape to close search modal.
                     if (event.keyCode == 27) {
                         app.modalclose();
                     }

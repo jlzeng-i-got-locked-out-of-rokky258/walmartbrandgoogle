@@ -95,7 +95,7 @@ app.get('/getpagescreenshot', async (req, res) => {
     }
 })
 
-app.get('/searchapi', async (req, res) => {
+app.get('/getsearchresults', async (req, res) => {
     searchAll(req.query.search).then(results => {
         let json = {
             "results": results.map(result => ({
@@ -106,8 +106,5 @@ app.get('/searchapi', async (req, res) => {
         res.send(json);
     });
 });
-
-
-app.use(express.static("static"));
 
 app.listen(3000)
